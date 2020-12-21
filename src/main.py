@@ -41,11 +41,7 @@ with open(INPUT_DATA, 'r') as f_input:
     for p in csv_input:
         #if len(p[0]) > 9:
         #    continue
-
-        allData = ''
-        for i in range(0, 21):
-            allData += str(p[i]) + ' '
-
+                
         person = {
             'id': p[0],
             'name': p[1],
@@ -69,8 +65,15 @@ with open(INPUT_DATA, 'r') as f_input:
             'interests': p[19],
             'other_interests': p[20],
             'location_preference': p[21],
-            'allData': allData,
+            'allData': '',
         }
+
+        allData = ''
+        for k, v in person.items():
+            if k in stringColumns:
+                allData += str(v) + ' '
+        person['allData'] = allData
+        
         processedData[p[0]] = person
         columnId.append(p[0])
         
@@ -107,23 +110,23 @@ for indx1, id1 in enumerate(columnId):
         if id1 == id2:
             matrixValues[indx1][indx2] = 0
             break
-
+        
         p2 = processedData[id2]
-        '''dissimilarityValue = {}
+        dissimilarityValue = {}
         for k, v in rangeColumns.items():
             dissimilarityValue[k] = getRangeDissimilarity(v['min'], v['max'], p1[k], p2[k])
             
-        for k in stringColumns:
-            dissimilarityValue[k] = getSentenceDissimilarity(p1[k], p2[k])
+        '''for k in stringColumns:
+            dissimilarityValue[k] = getSentenceDissimilarity(p1[k], p2[k])'''
             
         for k in ordinalColumns:
             dissimilarityValue[k] = getOrdinalDissimilarity(ordinalColumns[k], p1[k], p2[k])
+            
+        dissimilarityValue['allData'] = getSentenceDissimilarity(p1['allData'], p2['allData'])
 
         totalAttributes = len(dissimilarityValue.keys())
         dissSum = functools.reduce(operator.add, [v for v in dissimilarityValue.values()])
-        dissimilarity = dissSum / totalAttributes'''
-        dissimilarity = getSentenceDissimilarity(p1['allData'], p2['allData'])
-
+        dissimilarity = dissSum / totalAttributes
         similarityValue = 1 - dissimilarity
         matrixValues[indx1][indx2] = round(similarityValue * 100, 2)
         matrixValues[indx2][indx1] = matrixValues[indx1][indx2]

@@ -52,4 +52,5 @@ This code also uses 'fuzzywuzzy' packages 'fuzz' class to compute the ratio of s
 `pip install -r requirements.txt`
 5. Run machine learning analysis.
 `python src/main.py`
-6. 
+6. To deactivate the virtual environment.
+`deactivate`
